@@ -3,12 +3,14 @@ import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import PopupWithForm from "./PopupWithForm.js";
+import ImagePopup from "./ImagePopup.js";
 
 
 export default function App() {
   const [isEditProfilePopupOpen, setisEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setisAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setisEditAvatarPopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState(false);
 
   const editAvatarChildren = (
     <>
@@ -75,25 +77,35 @@ export default function App() {
   );
 
   function handleEditProfileClick() {
-    document.querySelector('.popup_type_profile').classList.add('popup_opened')
+    document.querySelector(".profile__edit-button").addEventListener('click', () => {
+      setisEditProfilePopupOpen(true);
+    });
   };
 
   function handleAddPlaceClick() {
-    document.querySelector('.popup_type_addImage').classList.add('popup_opened')
+    document.querySelector('.profile__add-button').addEventListener('click', () => {
+      setisAddPlacePopupOpen(true);
+    });
   };
 
   function handleEditAvatarClick() {
-    document.querySelector('.profile__avatar-button').addEventListener('click', () => {
-      setisEditAvatarPopupOpen(isEditAvatarPopupOpen => !isEditAvatarPopupOpen);
-    })
-    
+    document.querySelector(".profile__avatar-button").addEventListener('click', () => {
+      setisEditAvatarPopupOpen(true);
+    });
+  };
+
+  function handleCardClick(props) {
+    document.querySelector(".element__img").addEventListener('click', () => {
+      setSelectedCard(props, true);
+    });
+
   };
 
   function closeAllPopup() {
-    document.querySelector(".popup_type_avatar").classList.remove('popup_opened');
-    document.querySelector(".popup_type_profile").classList.remove('popup_opened');
-    document.querySelector(".popup_type_addImage").classList.remove('popup_opened');
-
+    setisEditProfilePopupOpen(false);
+    setisAddPlacePopupOpen(false);
+    setisEditAvatarPopupOpen(false);
+    setSelectedCard(false);
   };
 
   return (
@@ -103,28 +115,34 @@ export default function App() {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
-      >
-        <PopupWithForm
-          name='avatar'
-          title='Обновить аватар'
-          children={editAvatarChildren}
-          isOpen={handleEditAvatarClick}
-          isClose={closeAllPopup}
-        />
-        <PopupWithForm
-          name='profile'
-          title='Редактировать профиль'
-          children={editProfileChildren}
-          isClose={closeAllPopup}
-        />
-        <PopupWithForm
-          name='addImage'
-          title='Новое место'
-          children={editAddImagechildren}
-          isClose={closeAllPopup}
-        />
-      </Main>
+        onCardClick={handleCardClick}
+      />
+      <PopupWithForm
+        name='profile'
+        title='Редактировать профиль'
+        children={editProfileChildren}
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopup}
+      />
+      <PopupWithForm
+        name='addImage'
+        title='Новое место'
+        children={editAddImagechildren}
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopup}
+      />
+      <PopupWithForm
+        name='avatar'
+        title='Обновить аватар'
+        children={editAvatarChildren}
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopup}
+      />
+      <ImagePopup
+        card={selectedCard}
+        onClose={closeAllPopup}
+      />
       <Footer />
     </>
   );
-}
+};
