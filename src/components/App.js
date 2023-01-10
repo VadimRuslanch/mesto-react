@@ -11,20 +11,7 @@ export default function App() {
   const [isAddPlacePopupOpen, setisAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setisEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(false);
-
-  const editAvatarChildren = (
-    <>
-      <input
-        className="popup__input"
-        id="input-avatar"
-        type="url"
-        name="link"
-        placeholder="Ссылка на картинку"
-        required=""
-      />
-      <span className="popup__error popup__error_padding input-avatar-error" />
-    </>
-  );
+  const [linkImg, setLinkImg] = React.useState([])
 
   const editProfileChildren = (
     <>
@@ -53,6 +40,20 @@ export default function App() {
     </>
   );
 
+  const editAvatarChildren = (
+    <>
+      <input
+        className="popup__input"
+        id="input-avatar"
+        type="url"
+        name="link"
+        placeholder="Ссылка на картинку"
+        required=""
+      />
+      <span className="popup__error popup__error_padding input-avatar-error" />
+    </>
+  );
+
   const editAddImagechildren = (
     <>
       <input
@@ -76,29 +77,23 @@ export default function App() {
     </>
   );
 
+  
+
   function handleEditProfileClick() {
-    document.querySelector(".profile__edit-button").addEventListener('click', () => {
-      setisEditProfilePopupOpen(true);
-    });
+    setisEditProfilePopupOpen(true);
   };
 
   function handleAddPlaceClick() {
-    document.querySelector('.profile__add-button').addEventListener('click', () => {
-      setisAddPlacePopupOpen(true);
-    });
+    setisAddPlacePopupOpen(true);
   };
 
   function handleEditAvatarClick() {
-    document.querySelector(".profile__avatar-button").addEventListener('click', () => {
-      setisEditAvatarPopupOpen(true);
-    });
+    setisEditAvatarPopupOpen(true);
   };
 
   function handleCardClick(props) {
-    document.querySelector(".element__img").addEventListener('click', () => {
-      setSelectedCard(props, true);
-    });
-
+    setSelectedCard(true);
+    setLinkImg(props);
   };
 
   function closeAllPopup() {
@@ -140,6 +135,7 @@ export default function App() {
       />
       <ImagePopup
         card={selectedCard}
+        linkCard={linkImg}
         onClose={closeAllPopup}
       />
       <Footer />

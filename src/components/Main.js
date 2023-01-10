@@ -1,12 +1,12 @@
 import React from "react";
-import api from "./utils/api.js";
+import api from "../utils/api.js";
 import Card from "./Card.js";
 
 
 export default function Main(props) {
-    const [userName, setUserName] = React.useState();
-    const [userDescription, setUserDescription] = React.useState();
-    const [userAvatar, setUserAvatar] = React.useState();
+    const [userName, setUserName] = React.useState([]);
+    const [userDescription, setUserDescription] = React.useState([]);
+    const [userAvatar, setUserAvatar] = React.useState([]);
     const [cards, setCards] = React.useState([]);
 
     React.useEffect(() => {
@@ -62,37 +62,18 @@ export default function Main(props) {
                 </button>
             </section>
 
-            <section className="popup" id="popup-open-image">
-                <div className="popup__open-image">
-                    <img className="popup__image" src="#" alt="#" />
-                    <button className="popup__close-button" type="button" />
-                    <h2 className="popup__text" />
-                </div>
-            </section>
-
-            <section className="popup" id="popup-delete-image">
-                <div className="popup__container">
-                    <h3 className="popup__header popup__header_delete">Вы уверены?</h3>
-                    <button className="popup__close-button" type="button" />
-                    <form className="popup__form" id="form-delete-image" noValidate="">
-                    </form>
-                    <input
-                        className="popup__save-button"
-                        id="delete-button-images"
-                        type="submit"
-                        defaultValue="Да" />
-                </div>
-            </section>
-
             <section className="elements">{
-                cards.map(item => {
-                    return (<Card
-                        card={item}
-                        nameCard={item.name}
-                        linkCard={item.link}
-                        likesCard={item.likes}
-                        onCardClick={props.onCardClick}
-                    />)
+                cards.map((item) => {
+                    return (
+                        <Card
+                            key={item}
+                            card={item}
+                            nameCard={item.name}
+                            linkCard={item.link}
+                            likesCard={item.likes}
+                            onCardClick={props.onCardClick}
+                        />
+                    )
                 })
             }
             </section>
