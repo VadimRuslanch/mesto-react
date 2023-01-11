@@ -4,9 +4,9 @@ import Card from "./Card.js";
 
 
 export default function Main(props) {
-    const [userName, setUserName] = React.useState([]);
-    const [userDescription, setUserDescription] = React.useState([]);
-    const [userAvatar, setUserAvatar] = React.useState([]);
+    const [userName, setUserName] = React.useState('');
+    const [userDescription, setUserDescription] = React.useState('');
+    const [userAvatar, setUserAvatar] = React.useState('');
     const [cards, setCards] = React.useState([]);
 
     React.useEffect(() => {
@@ -66,7 +66,7 @@ export default function Main(props) {
                 cards.map((item) => {
                     return (
                         <Card
-                            key={item}
+                            key={item._id}
                             card={item}
                             nameCard={item.name}
                             linkCard={item.link}

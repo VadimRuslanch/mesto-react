@@ -10,8 +10,7 @@ export default function App() {
   const [isEditProfilePopupOpen, setisEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setisAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setisEditAvatarPopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(false);
-  const [linkImg, setLinkImg] = React.useState([])
+  const [selectedCard, setSelectedCard] = React.useState(null);
 
   const editProfileChildren = (
     <>
@@ -77,8 +76,6 @@ export default function App() {
     </>
   );
 
-  
-
   function handleEditProfileClick() {
     setisEditProfilePopupOpen(true);
   };
@@ -92,15 +89,14 @@ export default function App() {
   };
 
   function handleCardClick(props) {
-    setSelectedCard(true);
-    setLinkImg(props);
+    setSelectedCard(props);
   };
 
   function closeAllPopup() {
     setisEditProfilePopupOpen(false);
     setisAddPlacePopupOpen(false);
     setisEditAvatarPopupOpen(false);
-    setSelectedCard(false);
+    setSelectedCard(null);
   };
 
   return (
@@ -135,7 +131,6 @@ export default function App() {
       />
       <ImagePopup
         card={selectedCard}
-        linkCard={linkImg}
         onClose={closeAllPopup}
       />
       <Footer />
