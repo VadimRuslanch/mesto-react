@@ -1,56 +1,47 @@
 import React from "react";
-import api from "../utils/api.js";
 import Card from "./Card.js";
-
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+import { ArrayCardsContext } from "../contexts/ArrayCardsContext.js";
 
 export default function Main(props) {
-    const [userName, setUserName] = React.useState('');
-    const [userDescription, setUserDescription] = React.useState('');
-    const [userAvatar, setUserAvatar] = React.useState('');
-    const [cards, setCards] = React.useState([]);
-
-    React.useEffect(() => {
-        Promise.all([api.getUserInfo(), api.getCard()])
-            .then(([userData, initialCards]) => {
-                setUserName(userData.name);
-                setUserDescription(userData.about);
-                setUserAvatar(userData.avatar);
-                setCards(initialCards);
-            })
-            .catch((err) => {
-                console.log(`Ошибка: ${err}`);
-            })
-    }, [setUserName, setUserDescription, setUserAvatar, setCards]);
+    const currentUser = React.useContext(CurrentUserContext);
+    const cards = React.useContext(ArrayCardsContext);
 
     return (
         <main className="main">
 
             <section className="profile">
                 <div className="profile__page-autor">
-                    <button className="profile__avatar-button"
+                    <button
+                        className="profile__avatar-button"
                         onClick={props.onEditAvatar}
                     >
-                        <img className="profile__avatar"
-                            src={`${userAvatar}`}
+                        <img
+                            className="profile__avatar"
+                            src={currentUser.avatar}
                             alt="Аватар"
                         />
                     </button>
                     <div className="profile__info">
                         <div className="profile__name">
-                            <h1 className="profile__info-name profile-info"
+                            <h1
+                                className="profile__info-name profile-info"
                                 id="name"
                                 name="name"
                             >
-                                {userName}
+                                {currentUser.name}
                             </h1>
-                            <button className="profile__edit-button" type="button"
+                            <button
+                                className="profile__edit-button" type="button"
                                 onClick={props.onEditProfile} />
                         </div>
                         <p
                             className="profile__info-about-me profile-info"
                             id="about"
                             name="about"
-                        >{userDescription}</p>
+                        >
+                            {currentUser.about}
+                        </p>
                     </div>
                 </div>
                 <button
@@ -63,15 +54,21 @@ export default function Main(props) {
             </section>
 
             <section className="elements">{
-                cards.map((item) => {
+                cards.map((card) => {
+                    const isOwn = card.owner._id === currentUser._id;
+                    const isLiked = card.likes.some(i => i._id === currentUser._id);
+                    const cardLikeButtonClassName = (
+                        `element__like ${isLiked && 'element__like_active'}`
+                    );
                     return (
                         <Card
-                            key={item._id}
-                            card={item}
-                            nameCard={item.name}
-                            linkCard={item.link}
-                            likesCard={item.likes}
+                            key={card._id}
+                            card={card}
+                            isOwn={isOwn}
+                            like={cardLikeButtonClassName}
                             onCardClick={props.onCardClick}
+                            onCardLike={props.onCardLike}
+                            onCardDelete={props.onCardDelete}
                         />
                     )
                 })

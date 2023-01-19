@@ -11,23 +11,30 @@ class Api {
         return Promise.reject(`Ошибка: ${res.status}`)
     };
 
-    // Удаление лайка карточке
-    delete(cardId) {
-        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-            method: 'DELETE',
-            headers: this._headers
-        })
-            .then(res => this._parseResponse(res));
-    }
-
-    // Добавление лайка карточке
-    setLike(cardId) {
+    // Управление лайком карточки
+    _setLike(cardId) {
         return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
             method: 'PUT',
             headers: this._headers
         })
-            .then(res => this._parseResponse(res));
+            .then(res => this._parseResponse(res))
+    };
+
+    _deleteLike(cardId) {
+        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+            method: 'DELETE',
+            headers: this._headers
+        })
+            .then(res => this._parseResponse(res))
     }
+
+    changeLikeCardStatus(cardId, isLiked) {
+        if (isLiked) {
+            return this._setLike(cardId);
+        } else {
+            return this._deleteLike(cardId);
+        }
+    };
 
     // Удаление карточки
     deleteCard(cardId) {
@@ -35,7 +42,10 @@ class Api {
             method: "DELETE",
             headers: this._headers
         })
-            .then(res => this._parseResponse(res));
+            .then(res => this._parseResponse(res))
+            .catch((err) => {
+                console.log(`Ошибка: ${err}`);
+            })
     }
 
     // Добавление новой карточки
@@ -52,8 +62,7 @@ class Api {
     };
 
     // Редактирует аватар пользователя
-    editUserAvatar(userData) {
-        // console.log(userData.link)
+    setUserAvatar(userData) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: "PATCH",
             headers: this._headers,
@@ -62,11 +71,10 @@ class Api {
             })
         })
             .then(res => this._parseResponse(res))
-        // .then(res => console.log(res))
     }
 
     // Редактирует информацию профиля
-    editUserInfo(userData) {
+    setUserInfo(userData) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: "PATCH",
             headers: this._headers,

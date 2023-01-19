@@ -5,14 +5,17 @@ export default function PopupWithForm(props) {
                 <div className="popup__container">
                     <h2 className="popup__header">{props.title}</h2>
                     <button className="popup__close-button" type="button" onClick={props.onClose} />
-                    <form className="popup__form" noValidate="">
+                    <form className="popup__form" noValidate="" onSubmit={props.onSubmit}>
                         {props.children}
+
+                        <button
+                            className="popup__save-button"
+                            id="save-button-profile"
+                            type="submit"
+                        >
+                            {props.textBtn}
+                        </button>
                     </form>
-                    <input
-                        className="popup__save-button"
-                        id="save-button-profile"
-                        type="submit"
-                        defaultValue="Сохранить" />
                 </div>
             </section>
         </>
