@@ -2,18 +2,12 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm.js";
 
 export default function EditAvatarPopup(props) {
-    const [avatar, setAvatar] = React.useState('');
-    const link = React.useRef();
-
-    function handleChange(e) {
-        setAvatar(e.target.value);
-      }
+    const avatarRef = React.useRef();
 
     function handleSubmit(e) {
         e.preventDefault();
-
         props.onUpdateAvatar({
-            
+            avatar: avatarRef.current.value
         });
     }
     return (
@@ -31,8 +25,7 @@ export default function EditAvatarPopup(props) {
                 type="url"
                 placeholder="Ссылка на картинку"
                 required=""
-                value={avatar}
-                onChange={handleChange}
+                ref={avatarRef}
             />
             <span className="popup__error popup__error_padding input-avatar-error" />
         </PopupWithForm>)

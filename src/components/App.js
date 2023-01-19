@@ -99,9 +99,9 @@ export default function App() {
   }
 
   function handleUpdateAvatar(userData) {
+    console.log(userData)
     api.setUserAvatar(userData);
     setCurrentUser(userData);
-    console.log(userData)
     closeAllPopups();
   }
 
@@ -125,9 +125,10 @@ export default function App() {
           onUpdateUser={handleUpdateUser}
         />
         <EditAvatarPopup
-          avatar={currentUser.avatar}
           isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups} />
+          onClose={closeAllPopups} 
+          onUpdateAvatar={handleUpdateAvatar}
+          />
         <PopupWithForm
           name='addImage'
           title='Новое место'
