@@ -62,25 +62,25 @@ class Api {
     };
 
     // Редактирует аватар пользователя
-    setUserAvatar(userData) {
+    setUserAvatar(link) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: "PATCH",
             headers: this._headers,
             body: JSON.stringify({
-                avatar: userData.link
+                avatar: link
             })
         })
             .then(res => this._parseResponse(res))
     }
 
     // Редактирует информацию профиля
-    setUserInfo(userData) {
+    setUserInfo(userInfo) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: "PATCH",
             headers: this._headers,
             body: JSON.stringify({
-                name: userData.name,
-                about: userData.about
+                name: userInfo,
+                about: userInfo
             })
         })
             .then(res => this._parseResponse(res))
@@ -88,7 +88,7 @@ class Api {
     };
 
     // загрузка карточек с сервера
-    getCard() {
+    getCardsList() {
         return fetch(`${this._baseUrl}/cards`, {
             headers: this._headers
         })

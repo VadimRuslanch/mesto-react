@@ -1,11 +1,9 @@
 import React from "react";
 import Card from "./Card.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
-import { ArrayCardsContext } from "../contexts/ArrayCardsContext.js";
 
 export default function Main(props) {
     const currentUser = React.useContext(CurrentUserContext);
-    const cards = React.useContext(ArrayCardsContext);
 
     return (
         <main className="main">
@@ -54,7 +52,7 @@ export default function Main(props) {
             </section>
 
             <section className="elements">{
-                cards.map((card) => {
+                props.cards.map((card) => {
                     const isOwn = card.owner._id === currentUser._id;
                     const isLiked = card.likes.some(i => i._id === currentUser._id);
                     const cardLikeButtonClassName = (

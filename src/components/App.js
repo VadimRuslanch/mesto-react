@@ -2,9 +2,9 @@ import React from "react";
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
-import PopupWithForm from "./PopupWithForm.js";
 import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
+import AddPlacePopup from "./AddPlacePopup"
 import ImagePopup from "./ImagePopup.js";
 import api from "../utils/api.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js"
@@ -19,7 +19,7 @@ export default function App() {
   const [cards, setCards] = React.useState([])
 
   React.useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getCard()])
+    Promise.all([api.getUserInfo(), api.getCardsList()])
       .then(([userData, initialCards]) => {
         setCurrentUser(userData)
         setCards(initialCards)
@@ -28,29 +28,6 @@ export default function App() {
         console.log(`Ошибка: ${err}`);
       })
   }, [setCurrentUser, setCards])
-
-  const editAddImagechildren = (
-    <>
-      <input
-        className="popup__input"
-        id="input-title"
-        type="text"
-        name="name"
-        placeholder="Название"
-        minLength={2}
-        maxLength={30}
-        required="" />
-      <span className="popup__error input-title-error" />
-      <input
-        className="popup__input"
-        id="input-link"
-        type="url"
-        name="link"
-        placeholder="Ссылка на картинку"
-        required="" />
-      <span className="popup__error input-link-error" />
-    </>
-  );
 
   function handleEditProfileClick() {
     setisEditProfilePopupOpen(true);
@@ -92,17 +69,31 @@ export default function App() {
       });
   };
 
-  function handleUpdateUser(userData) {
-    api.setUserInfo(userData);
-    setCurrentUser(userData);
-    closeAllPopups();
-  }
+  function handleUpdateUser({ userInfo }) {
+    api
+      .setUserInfo(userInfo)
+      .then((newUserInfo) => {
+        setCurrentUser(newUserInfo)
+        closeAllPopups()
+      });
+  };
 
-  function handleUpdateAvatar(userData) {
-    console.log(userData)
-    api.setUserAvatar(userData);
-    setCurrentUser(userData);
-    closeAllPopups();
+  function handleUpdateAvatar({ avatar }) {
+    api
+      .setUserAvatar(avatar)
+      .then((newUserInfo) => {
+        setCurrentUser(newUserInfo)
+        closeAllPopups()
+      });
+  };
+
+  function handleAddPlaceSubmit(newCard) {
+    api
+      .addCard(newCard)
+      .then((newCard)=>{
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
   }
 
   return (
@@ -110,6 +101,7 @@ export default function App() {
       <ArrayCardsContext.Provider value={cards}>
         <Header />
         <Main
+          cards={cards}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
@@ -118,24 +110,21 @@ export default function App() {
           onCardDelete={handleCardDelete}
         />
         <EditProfilePopup
-          name={currentUser.name}
-          description={currentUser.about}
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          name={currentUser.name}
+          description={currentUser.about}
         />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups} 
-          onUpdateAvatar={handleUpdateAvatar}
-          />
-        <PopupWithForm
-          name='addImage'
-          title='Новое место'
-          children={editAddImagechildren}
-          isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+        />
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}
+          onAddCard={handleAddPlaceSubmit}
         />
         <ImagePopup
           card={selectedCard}
