@@ -6,6 +6,7 @@ import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup"
 import ImagePopup from "./ImagePopup.js";
+import Popup from "./Popup.js";
 import api from "../utils/api.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js"
 import { ArrayCardsContext } from "../contexts/ArrayCardsContext.js"
@@ -31,25 +32,42 @@ export default function App() {
 
   function handleEditProfileClick() {
     setisEditProfilePopupOpen(true);
+    document.addEventListener('keydown', handelEscClose)
   };
 
   function handleAddPlaceClick() {
     setisAddPlacePopupOpen(true);
+    document.addEventListener('keydown', handelEscClose)
   };
 
   function handleEditAvatarClick() {
     setisEditAvatarPopupOpen(true);
+    document.addEventListener('keydown', handelEscClose)
   };
 
-  function closeAllPopups() {
+  function closeAllPopups(e) {
     setisEditProfilePopupOpen(false);
     setisAddPlacePopupOpen(false);
     setisEditAvatarPopupOpen(false);
     setSelectedCard(null);
+    document.removeEventListener('keydown', handelEscClose);
   };
+
+  function handelEscClose(e) {
+    const keyEsc = e.key === 'Escape';
+    if (keyEsc) {
+      closeAllPopups();
+    };
+  };
+
+  function handleСlickClose(e) {
+    if (e.target.classList.contains('popup_opened') || e.target.classList.contains('popup__close-button'))
+      closeAllPopups();
+  }
 
   function handleCardClick(props) {
     setSelectedCard(props);
+    document.addEventListener('keydown', handelEscClose)
   };
 
   function handleCardLike(card) {
@@ -90,7 +108,7 @@ export default function App() {
   function handleAddPlaceSubmit(newCard) {
     api
       .addCard(newCard)
-      .then((newCard)=>{
+      .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })

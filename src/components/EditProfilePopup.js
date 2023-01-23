@@ -38,7 +38,7 @@ export default function EditProfilePopup(props) {
                 onSubmit={handleSubmit}
                 textBtn="Сохранить"
             >
-                <label>
+                <label >
                     <input
                         className="popup__input"
                         id="input-name"

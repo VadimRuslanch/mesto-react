@@ -8,6 +8,7 @@
     min-width: 24px;
     height: 24px;
     border: none;
+    outline: none;
 }
 
 .profile__edit-button:hover{

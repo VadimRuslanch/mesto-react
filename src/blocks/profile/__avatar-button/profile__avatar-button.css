@@ -11,4 +11,5 @@
     background-position: center;
     background-repeat: no-repeat;
     object-fit: cover;
+    outline: none;
 }
