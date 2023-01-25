@@ -1,16 +1,14 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm.js";
-import { ArrayCardsContext } from "../contexts/ArrayCardsContext.js";
 
 export default function AddPlacePopup(props) {
-    const currentCard = React.useContext(ArrayCardsContext);
     const [name, setName] = React.useState("");
     const [link, setLink] = React.useState("");
 
     React.useEffect(() => {
-        setName(currentCard.name = "")
-        setLink(currentCard.link = "")
-    }, [currentCard, props.isOpen]);
+        setName("")
+        setLink("")
+    }, [props.isOpen]);
 
     function handleNameChange(e) {
         setName(e.target.value)

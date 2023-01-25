@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from 'react';
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
@@ -6,20 +6,18 @@ import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup"
 import ImagePopup from "./ImagePopup.js";
-import Popup from "./Popup.js";
 import api from "../utils/api.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js"
-import { ArrayCardsContext } from "../contexts/ArrayCardsContext.js"
 
 export default function App() {
-  const [isEditProfilePopupOpen, setisEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setisAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setisEditAvatarPopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(null);
-  const [currentUser, setCurrentUser] = React.useState({})
-  const [cards, setCards] = React.useState([])
+  const [isEditProfilePopupOpen, setisEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setisAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setisEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [currentUser, setCurrentUser] = useState({})
+  const [cards, setCards] = useState([])
 
-  React.useEffect(() => {
+  useEffect(() => {
     Promise.all([api.getUserInfo(), api.getCardsList()])
       .then(([userData, initialCards]) => {
         setCurrentUser(userData)
@@ -84,7 +82,10 @@ export default function App() {
       .deleteCard(card._id)
       .then(() => {
         setCards((state) => state.filter((item) => item._id !== card._id))
-      });
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      })
   };
 
   function handleUpdateUser({ userInfo }) {
@@ -93,7 +94,10 @@ export default function App() {
       .then((newUserInfo) => {
         setCurrentUser(newUserInfo)
         closeAllPopups()
-      });
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      })
   };
 
   function handleUpdateAvatar({ avatar }) {
@@ -102,7 +106,10 @@ export default function App() {
       .then((newUserInfo) => {
         setCurrentUser(newUserInfo)
         closeAllPopups()
-      });
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      })
   };
 
   function handleAddPlaceSubmit(newCard) {
@@ -110,13 +117,15 @@ export default function App() {
       .addCard(newCard)
       .then((newCard) => {
         setCards([newCard, ...cards]);
-        closeAllPopups();
+        closeAllPopups()
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
       })
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <ArrayCardsContext.Provider value={cards}>
         <Header />
         <Main
           cards={cards}
@@ -149,7 +158,6 @@ export default function App() {
           onClose={closeAllPopups}
         />
         <Footer />
-      </ArrayCardsContext.Provider>
     </CurrentUserContext.Provider>
   );
 };

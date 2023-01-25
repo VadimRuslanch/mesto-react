@@ -47,7 +47,7 @@ export default function EditProfilePopup(props) {
                         minLength={2}
                         maxLength={40}
                         required=""
-                        value={name}
+                        value={name || ''}
                         onChange={handleNameChange}
                     />
                     <span className="popup__error input-name-error" />
@@ -59,7 +59,7 @@ export default function EditProfilePopup(props) {
                         minLength={2}
                         maxLength={200}
                         required=""
-                        value={description}
+                        value={description || ''}
                         onChange={handleDescriptionChange}
                     />
                     <span className="popup__error input-about-me-error" />
