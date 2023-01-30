@@ -14,5 +14,3 @@
 В данной работе были использованы такие технологии: CSS, HTML5, JS, Node.js, REST API, React использование локального сервера WebPack.
 
 Задачи на следующую версию: добавление авторизации пользователя. 
-
-GitPages: https://vadimruslanch.github.io/mesto/
